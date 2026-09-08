@@ -236,19 +236,7 @@
       <div class="toc-content{{ if eq $toc.auto false }} always-active{{ end }}{{ with $params.password }} encrypted-hidden{{ end }}" id="toc-content-auto"></div>
     {{- end -}}
 
-    {{- with .Site.Taxonomies.tags -}}
-      <section class="post-tags-aside" aria-labelledby="postTagsAsideTitle">
-        <h2 class="post-tags-aside-title" id="postTagsAsideTitle">All Tags</h2>
-        <div class="post-tags-aside-list">
-          {{- range $name, $taxonomy := . -}}
-            <a class="post-tags-aside-link" href="{{ printf "/tags/%s/" ($name | urlize) | relLangURL }}">
-              <span>{{ $name }}</span>
-              <small>{{ len $taxonomy }}</small>
-            </a>
-          {{- end -}}
-        </div>
-      </section>
-    {{- end -}}
+
 
     {{- /* Custom block after post toc */ -}}
     {{- block "custom-post__toc:after" . }}{{ end -}}
