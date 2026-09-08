@@ -1,6 +1,6 @@
 theme = "FixIt"
 title = "DSUNDAR"
-baseURL = "https://example.org/"
+baseURL = "https://dsundar01.github.io/"
 locale = "en"
 languageName = "English"
 defaultContentLanguage = "en"
