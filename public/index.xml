@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My New Hugo Project</title>
+    <link>http://localhost:1313/</link>
+    <description>My New Hugo Project</description>
+    <generator>Hugo 0.165.0 &amp; FixIt v1.0.0-alpha.2-mtsdia3u</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 08 Sep 2026 12:00:00 +0530</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+      <title>Fault Tolerance</title>
+      <link>http://localhost:1313/posts/fault-tolerance/</link>
+      <pubDate>Tue, 08 Sep 2026 12:00:00 +0530</pubDate>
+      <guid>http://localhost:1313/posts/fault-tolerance/</guid>
+      <category domain="http://localhost:1313/categories/system-design/">System-Design</category>
+      <description>&lt;p&gt;Fault tolerance is the ability of a system to continue operating correctly when one or more of its components fail. Instead of crashing or returning corrupted results, a fault-tolerant system isolates the problem, switches to a healthy component, or gracefully degrades so that users still get value.&lt;/p&gt;&#xA;&lt;p&gt;In modern distributed systems, hardware failures, network partitions, and software bugs are not exceptional events — they are expected. Designing for fault tolerance means accepting that things will break and planning for those breaks from the start. This mindset shifts engineering from &amp;ldquo;prevent all failures&amp;rdquo; to &amp;ldquo;recover quickly and safely when failures happen.&amp;rdquo;&lt;/p&gt;&#xA;&lt;p&gt;A few common fault-tolerance patterns include:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Redundancy&lt;/strong&gt;: Keeping duplicate copies of data or services so a single failure does not cause downtime.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Failover&lt;/strong&gt;: Automatically moving work from a failed node to a healthy one.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Retries and backoffs&lt;/strong&gt;: Re-attempting a failed operation with delays to handle temporary glitches.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Circuit breakers&lt;/strong&gt;: Stopping repeated calls to a failing service to prevent cascading failures.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Graceful degradation&lt;/strong&gt;: Reducing functionality rather than shutting down entirely when a dependency is unavailable.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;No system is completely immune to failure. The goal of fault tolerance is to make sure that when something does go wrong, the impact is small, the recovery is fast, and the users are not left staring at a broken page.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

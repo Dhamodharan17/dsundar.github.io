@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>All Posts - My New Hugo Project</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>My New Hugo Project</description>
+    <generator>Hugo 0.165.0 &amp; FixIt v1.0.0-alpha.2-mtsdia3u</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 08 Sep 2026 12:00:00 +0530</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" /><item>
+      <title>Fault Tolerance</title>
+      <link>http://localhost:1313/posts/fault-tolerance/</link>
+      <pubDate>Tue, 08 Sep 2026 12:00:00 +0530</pubDate>
+      <guid>http://localhost:1313/posts/fault-tolerance/</guid>
+      <category domain="http://localhost:1313/categories/system-design/">System-Design</category>
+      <description>&lt;p&gt;Fault tolerance is the ability of a system to continue operating correctly when one or more of its components fail. Instead of crashing or returning corrupted results, a fault-tolerant system isolates the problem, switches to a healthy component, or gracefully degrades so that users still get value.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
