@@ -1,4 +1,763 @@
-baseURL = 'https://example.org/'
-locale = 'en-us'
-title = 'My New Hugo Project'
-theme = 'FixIt'
+theme = "FixIt"
+title = "DSUNDAR"
+baseURL = "https://example.org/"
+locale = "en"
+languageName = "English"
+defaultContentLanguage = "en"
+timeZone = "Asia/Kolkata"
+timeout = "5m"
+
+# Enable emoji shortcodes in content
+enableEmoji = true
+
+# Disable unnecessary language processing for better performance
+hasCJKLanguage = false
+
+# Let Hugo generate robots.txt from template
+enableRobotsTXT = true
+
+# Enable Git info for lastmod dates (improves SEO with accurate lastmod in sitemap)
+enableGitInfo = false
+
+# Performance: Disable unused taxonomy pages
+disableKinds = []
+
+# -------------------------------------------------------------------------------------
+# Front Matter Configuration
+# -------------------------------------------------------------------------------------
+
+[frontmatter]
+lastmod = ["lastmod", ":git", ":fileModTime", ":default"]
+
+# ============================================================================
+# BUILD & MINIFICATION CONFIGURATION (Performance Optimization)
+# ============================================================================
+
+[build]
+  writeStats = true
+  noJSConfigInAssets = true
+  useResourceCacheWhen = "fallback"
+
+[minify]
+  disableCSS = false
+  disableHTML = false
+  disableJS = false
+  disableJSON = false
+  disableSVG = true
+  disableXML = false
+  minifyOutput = true
+  [minify.tdewolff]
+    [minify.tdewolff.css]
+      precision = 0
+    [minify.tdewolff.html]
+      keepComments = false
+      keepSpecialComments = true
+      keepDefaultAttrVals = true
+      keepDocumentTags = true
+      keepEndTags = true
+      keepQuotes = false
+      keepWhitespace = false
+    [minify.tdewolff.js]
+      keepVarNames = false
+      precision = 0
+    [minify.tdewolff.json]
+      precision = 0
+    [minify.tdewolff.svg]
+      precision = 2
+      keepComments = false
+    [minify.tdewolff.xml]
+      keepWhitespace = false
+
+# ============================================================================
+# MENU CONFIGURATION
+# ============================================================================
+
+[[menus.main]]
+  identifier = "posts"
+  name = "Posts"
+  url = "/posts/"
+  title = ""
+  weight = 1
+  [menus.main.params]
+    icon = "fa-solid fa-archive"
+
+[[menus.main]]
+  identifier = "daily"
+  name = "Daily"
+  url = "/daily/"
+  title = ""
+  weight = 2
+  [menus.main.params]
+    icon = "fa-solid fa-newspaper"
+
+[[menus.main]]
+  identifier = "categories"
+  name = "Categories"
+  url = "/categories/"
+  title = ""
+  weight = 3
+  [menus.main.params]
+    icon = "fa-solid fa-folder-tree"
+
+[[menus.main]]
+  identifier = "about"
+  name = "About"
+  url = "/about/"
+  title = ""
+  weight = 4
+  [menus.main.params]
+    icon = "fa-solid fa-user"
+
+[[menus.main]]
+  identifier = "contact"
+  name = "Contact"
+  url = "/contact/"
+  title = ""
+  weight = 5
+  [menus.main.params]
+    icon = "fa-solid fa-envelope"
+
+# ============================================================================
+# SITE PARAMETERS
+# ============================================================================
+
+[params]
+  # FixIt theme version
+  version = "0.4.X"
+  # site description
+  description = "A place to share learnings, ideas, short notes, guides, and reflections from projects and everyday life, focused on clarity and usefulness. Lessons learned and experiences are distilled into actionable takeaways for curious readers."
+  # site keywords
+  keywords = ["DSUNDAR", "Personal Blog", "Software Engineering", "Computer Science", "System Design", "Learnings", "Data Structures Algorithms", "Networking", "Artificial Intelligence", "Problem-solving", "Coding Interview Prep", "AI/ML", "Experience", "Travel"]
+  # site default theme ("light", "dark", "auto")
+  default_theme = "auto"
+  # which hash function used for SRI, when empty, no SRI is used
+  fingerprint = ""
+  # date format
+  date_format = "02-Jan-2006"
+  # website images for Open Graph and Twitter Cards
+  images = ["/screenshot.png"]
+  # enable PWA support
+  enablePWA = true
+  # whether to add external Icon for external links automatically
+  externalIcon = false
+  # whether to capitalize titles
+  capitalizeTitles = false
+  # whether to add site title to the title of every page
+  with_site_title = true
+  # title delimiter when the site title is be added to the title of every page
+  title_delimiter = "-"
+  # whether to add site subtitle to the title of index page
+  indexWithSubtitle = false
+  # whether to enable tooltip replacement for elements with title attribute
+  tooltip = true
+  # whether to inject FixIt theme meta tag
+  disable_theme_inject = true
+  # License information
+  license = '<a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>'
+
+  # ----------------------------------------------------------------------------
+  # Author Configuration
+  # ----------------------------------------------------------------------------
+  [params.author]
+    name = "DSUNDAR"
+    email = "netproxy@duck.com"
+    link = "/about/"
+    avatar = "/avatar.webp"
+
+  # ----------------------------------------------------------------------------
+  # Git Info Configuration
+  # ----------------------------------------------------------------------------
+  [params.git_info]
+    repo = ""
+    branch = "main"
+    dir = "content"
+
+  # ----------------------------------------------------------------------------
+  # App Icon Configuration (PWA)
+  # ----------------------------------------------------------------------------
+  [params.app]
+    title = "DSUNDAR"
+    noFavicon = false
+    svgFavicon = ""
+    iconColor = "#5bbad5"
+    tileColor = "#da532c"
+    [params.app.themeColor]
+      light = "#f8f8f8"
+      dark = "#252627"
+
+  # ----------------------------------------------------------------------------
+  # Search Configuration (Fuse.js - Client-side)
+  # ----------------------------------------------------------------------------
+  [params.search]
+    enable = true
+    # type of search engine ("algolia", "fuse", "cse", "post-chat")
+    type = "fuse"
+    content_length = 4000
+    placeholder = "Search titles or contents"
+    max_result_length = 10
+    snippet_length = 30
+    highlight_tag = "em"
+    absoluteURL = false
+    [params.search.algolia]
+      index = ""
+      appID = ""
+      searchKey = ""
+    [params.search.fuse]
+      isCaseSensitive = false
+      minMatchCharLength = 2
+      findAllMatches = false
+      location = 0
+      threshold = 0.3
+      distance = 100
+      ignoreLocation = false
+      useExtendedSearch = false
+      ignoreFieldNorm = false
+
+  # ----------------------------------------------------------------------------
+  # Image Optimization Configuration
+  # ----------------------------------------------------------------------------
+  [params.image]
+    cache_remote = true
+    optimise = true
+
+  # ----------------------------------------------------------------------------
+  # Code Block Configuration
+  # ----------------------------------------------------------------------------
+  [params.codeblock]
+    wrapper = true
+    mode = "classic"
+    max_shown_lines = 30
+    copyable = true
+    line_nos_toggler = true
+    lineWrapToggler = false
+
+  # ----------------------------------------------------------------------------
+  # Header Configuration
+  # ----------------------------------------------------------------------------
+  [params.header]
+    desktop_mode = "sticky"
+    mobile_mode = "auto"
+    [params.header.title]
+      logo = ""
+      name = "~DSUNDAR"
+      pre = ""
+      post = " 🌱"
+      typeit = false
+    [params.header.subtitle]
+      name = ""
+      typeit = false
+
+  # ----------------------------------------------------------------------------
+  # Breadcrumb Configuration
+  # ----------------------------------------------------------------------------
+  [params.breadcrumb]
+    enable = true
+    sticky = false
+    show_home = true
+
+  # ----------------------------------------------------------------------------
+  # Navigation Configuration
+  # ----------------------------------------------------------------------------
+  [params.navigation]
+    inSection = false
+
+  # ----------------------------------------------------------------------------
+  # Footer Configuration
+  # ----------------------------------------------------------------------------
+  [params.footer]
+    enable = true
+    copyright = true
+    author = true
+    since = 2020
+    icp = ""
+    license = '<a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>'
+    [params.footer.powered]
+      enable = false
+      hugoLogo = false
+      themeLogo = false
+    [params.footer.site_time]
+      enable = false
+      animate = true
+      icon = "fa-solid fa-heartbeat"
+      pre = ""
+      value = "2020-01-01T00:00:00+05:30"
+
+  # ----------------------------------------------------------------------------
+  # Archives Page Configuration
+  # ----------------------------------------------------------------------------
+  [params.archives]
+    paginate = 20
+    date_format = "01-02"
+
+  # ----------------------------------------------------------------------------
+  # Section (All Posts) Page Configuration
+  # ----------------------------------------------------------------------------
+  [params.section]
+    paginate = 20
+    date_format = "02-Jan-2006"
+    [params.section.feed]
+      limit = -1
+      fullText = false
+
+  # ----------------------------------------------------------------------------
+  # List (Category or Tag) Page Configuration
+  # ----------------------------------------------------------------------------
+  [params.list]
+    paginate = 20
+    date_format = "02-Jan-2006"
+    [params.list.feed]
+      limit = -1
+      fullText = false
+
+  # ----------------------------------------------------------------------------
+  # Recently Updated Configuration
+  # ----------------------------------------------------------------------------
+  [params.recently_updated]
+    archives = true
+    section = true
+    list = true
+    days = 30
+    maxCount = 10
+
+  # ----------------------------------------------------------------------------
+  # Home Page Configuration
+  # ----------------------------------------------------------------------------
+  [params.home]
+    [params.home.profile]
+      enable = true
+      gravatarEmail = ""
+      avatar_url = "/avatar.webp"
+      avatarMenu = ""
+      title = ""
+      subtitle = "Welcome! This is my little hypertext garden — make yourself at home."
+      typeit = true
+      social = true
+      disclaimer = '<style>[data-theme-mode="dark"] .home-banner-img{filter:invert(1)}@media (prefers-color-scheme:dark){[data-theme-mode="auto"] .home-banner-img{filter:invert(1)}}.home-subtitle,.home-subtitle .typeit{font-family:"Ink Free","Segoe Print","Bradley Hand","Noteworthy",cursive;letter-spacing:0.2px}</style><div style="margin-top:0.7rem;max-width:700px;width:100%;margin-left:auto;margin-right:auto"><img class="home-banner-img" src="/banner.svg" alt="" fetchpriority="high" decoding="async" width="701" height="183" style="width:100%;height:auto;border-radius:4px;pointer-events:none;user-select:none" draggable="false" oncontextmenu="return false"></div><svg style="display:block;margin:0.8rem auto -1rem;width:75%;height:8px;opacity:0.4" viewBox="0 0 240 10" preserveAspectRatio="xMidYMid meet"><path d="M0 5 C10 0 10 0 20 5 C30 10 30 10 40 5 C50 0 50 0 60 5 C70 10 70 10 80 5 C90 0 90 0 100 5 C110 10 110 10 120 5 C130 0 130 0 140 5 C150 10 150 10 160 5 C170 0 170 0 180 5 C190 10 190 10 200 5 C210 0 210 0 220 5 C230 10 230 10 240 5" fill="none" stroke="#888" stroke-width="1.2"/></svg>'
+    [params.home.posts]
+      enable = true
+      paginate = 7
+      imagePreview = false
+
+  # ----------------------------------------------------------------------------
+  # Social Media Links (Author Profile)
+  # weight controls left-to-right display order (lower = first)
+  # ----------------------------------------------------------------------------
+  [params.social]
+    RSS = true
+
+  [params.social.Linkedin]
+    id = "samirpaul"
+    weight = 1
+
+  [params.social.GitHub]
+    id = "SamirPaulb"
+    weight = 2
+
+  # ----------------------------------------------------------------------------
+  # TypeIt Animation Configuration
+  # ----------------------------------------------------------------------------
+  [params.typeit]
+    speed = 100
+    cursorSpeed = 1000
+    cursorChar = "|"
+    duration = -1
+    loop = false
+
+  # ----------------------------------------------------------------------------
+  # Search Engine Verification Codes (SEO)
+  # ----------------------------------------------------------------------------
+  [params.verification]
+    google = "vJAOBxbJTCK2vXG-hLFeGsoC9hXgFlCpuJJ8AcJLROQ"
+    bing = "1A92FC2EC113F8616A21D76DA684A133"
+    yandex = "fe6a06c57be84984"
+    pinterest = "24bac6e1fbf1750de40d59bb788d9dd9"
+    baidu = ""
+    so = ""
+    sogou = ""
+
+  # ----------------------------------------------------------------------------
+  # Site SEO Configuration (Schema.org)
+  # ----------------------------------------------------------------------------
+  [params.seo]
+    image = "/og-image.png"
+    thumbnailUrl = "/screenshot.png"
+
+  # ----------------------------------------------------------------------------
+  # Pace - Page loading progress bar
+  # ----------------------------------------------------------------------------
+  [params.pace]
+    enable = true
+    color = "blue"
+    theme = "minimal"
+
+  # ----------------------------------------------------------------------------
+  # Analytics (handled via custom consent-mode partial below)
+  # ----------------------------------------------------------------------------
+  [params.analytics]
+    enable = false
+
+  # ----------------------------------------------------------------------------
+  # Cookie Consent (handled via custom consent-mode partial below)
+  # ----------------------------------------------------------------------------
+  [params.cookieconsent]
+    enable = false
+
+  # ----------------------------------------------------------------------------
+  # Busuanzi / Vercount Page View Counter (Custom Cloudflare Worker)
+  # ----------------------------------------------------------------------------
+  [params.busuanzi]
+    enable = true
+    source = "https://web.samirpaul.workers.dev/views/js"
+    site_views = true
+    page_views = true
+
+  # ----------------------------------------------------------------------------
+  # Back to Top
+  # ----------------------------------------------------------------------------
+  [params.back_to_top]
+    enable = true
+    scrollpercent = true
+
+  # ----------------------------------------------------------------------------
+  # Reading Progress Bar
+  # ----------------------------------------------------------------------------
+  [params.reading_progress]
+    enable = true
+    start = "start"
+    position = "top"
+    reversed = false
+    light = ""
+    dark = ""
+    height = "2px"
+
+  # ----------------------------------------------------------------------------
+  # Tag Cloud
+  # ----------------------------------------------------------------------------
+  [params.tag_cloud]
+    enable = true
+    min = 14
+    max = 32
+    peakCount = 10
+    orderby = "name"
+
+  # ----------------------------------------------------------------------------
+  # GitHub Corner
+  # ----------------------------------------------------------------------------
+  [params.github_corner]
+    enable = false
+
+  # ----------------------------------------------------------------------------
+  # Feed Configuration (RSS)
+  # ----------------------------------------------------------------------------
+  [params.feed]
+    limit = 10
+    fullText = true
+
+  # ----------------------------------------------------------------------------
+  # Custom Partials Configuration
+  # ----------------------------------------------------------------------------
+  [params.custom_partials]
+    head = ["custom/consent-manager.html"]
+    menuDesktop = []
+    menuMobile = []
+    profile = []
+    aside = []
+    comment = []
+    footer = ["custom/footer-links.html"]
+    widgets = []
+    assets = []
+    postFooterBefore = []
+    postFooterAfter = []
+
+  # ----------------------------------------------------------------------------
+  # Page Configuration (Default Settings for All Pages)
+  # ----------------------------------------------------------------------------
+  [params.page]
+    authorAvatar = true
+    hiddenFromHomePage = false
+    hiddenFromSearch = false
+    hiddenFromRelated = false
+    hiddenFromFeed = false
+    twemoji = false
+    lightgallery = true
+    ruby = true
+    fraction = true
+    fontawesome = true
+    linkToMarkdown = false
+    linkToSource = false
+    linkToEdit = false
+    linkToReport = false
+    linkToVscode = false
+    pageStyle = "wide"
+    autoBookmark = false
+    showLastmod = true
+    wordCount = true
+    readingTime = true
+    endFlag = ""
+    instantPage = true
+    collectionList = false
+    collectionNavigation = false
+    license = '<a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>'
+
+    # Display a message at the beginning of an article to warn the reader that its content might be expired
+    [params.page.expirationReminder]
+      enable = true
+      reminder = 180
+      warning = 365
+      closeComment = false
+
+    # Table of the contents config
+    [params.page.toc]
+      enable = true
+      keepStatic = false
+      auto = true
+      position = "right"
+
+    # Mathematical formulas configuration
+    [params.page.math]
+      enable = false
+      type = "katex"
+      [params.page.math.katex]
+        copyTex = true
+        throwOnError = false
+        errorColor = "#ff4949"
+
+    # Related content config
+    [params.page.related]
+      enable = true
+      count = 5
+
+    # Social share links in post page
+    [params.page.share]
+      enable = true
+      Twitter = true
+      Facebook = true
+      Linkedin = true
+      Reddit = true
+      Whatsapp = true
+      Pinterest = true
+      HackerNews = true
+      Line = false
+      Weibo = false
+      Tumblr = false
+      VK = false
+      Buffer = false
+      Xing = false
+      Instapaper = false
+      Pocket = false
+      Flipboard = false
+      Myspace = false
+      Blogger = false
+      Baidu = false
+      Odnoklassniki = false
+      Evernote = false
+      Skype = false
+      Trello = false
+      Mix = false
+
+    # Comment config
+    [params.page.comment]
+      enable = true
+      # Giscus comment config (GitHub Discussions-based)
+      [params.page.comment.giscus]
+        enable = true
+        repo = "SamirPaulb/comments"
+        repoId = "R_kgDOQLe9bw"
+        category = "comments"
+        categoryId = "DIC_kwDOQLe9b84CxN4R"
+        mapping = "pathname"
+        origin = "https://giscus.app"
+        strict = "0"
+        reactionsEnabled = "1"
+        emitMetadata = "1"
+        inputPosition = "top"
+        lang = "en"
+        lightTheme = "light"
+        darkTheme = "dark"
+        lazyLoad = true
+
+      # Waline comment config
+      [params.page.comment.waline]
+        enable = false
+        serverURL = "https://comment-core.vercel.app"
+        comment = true
+        pageview = false
+        login = "disable"
+        meta = [
+          "nick",
+          "mail"
+        ]
+        requiredMeta = [
+          "nick",
+          "mail"
+        ]
+        wordLimit = 250
+        imageUploader = false
+        highlighter = false
+        texRenderer = false
+        search = false
+        reaction = false
+        emoji = [
+          "//unpkg.com/@waline/emojis@1.1.0/weibo"
+        ]
+        turnstileKey = "0x4AAAAAAB_ij-DURoZrsVaD"
+
+    # Page SEO config
+    [params.page.seo]
+      images = []
+      [params.page.seo.publisher]
+        name = "DSUNDAR"
+        logoUrl = "/logo.png"
+
+
+# ============================================================================
+# MARKUP CONFIGURATION (Syntax Highlighting & Goldmark)
+# ============================================================================
+
+[markup]
+  # Syntax Highlighting
+  [markup.highlight]
+    codeFences = true
+    noClasses = false
+    anchorLineNos = false
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = true
+  # Goldmark is from Hugo 0.60 the default library used for Markdown
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      definitionList = true
+      footnote = true
+      linkify = true
+      strikethrough = true
+      table = true
+      taskList = true
+      typographer = true
+      [markup.goldmark.extensions.extras.delete]
+        enable = true
+      [markup.goldmark.extensions.extras.insert]
+        enable = true
+      [markup.goldmark.extensions.extras.mark]
+        enable = true
+      [markup.goldmark.extensions.extras.subscript]
+        enable = true
+      [markup.goldmark.extensions.extras.superscript]
+        enable = true
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        block = [['\[', '\]'], ['$$', '$$']]
+        inline = [['\(', '\)'], ['$', '$']]
+    [markup.goldmark.parser.attribute]
+      block = true
+      title = true
+    [markup.goldmark.renderer]
+      unsafe = true
+  # Table Of Contents settings
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 6
+
+
+# ============================================================================
+# SITEMAP CONFIGURATION (SEO)
+# ============================================================================
+
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.5
+
+
+# ============================================================================
+# PERMALINKS CONFIGURATION (URL Structure)
+# ============================================================================
+
+[permalinks]
+  [permalinks.page]
+    posts = "posts/:contentbasename"
+
+
+# ============================================================================
+# PRIVACY CONFIGURATION (GDPR Compliance)
+# ============================================================================
+
+[privacy]
+  [privacy.x]
+    enableDNT = true
+  [privacy.youtube]
+    privacyEnhanced = true
+
+
+# ============================================================================
+# OUTPUT CONFIGURATION
+# ============================================================================
+
+[outputs]
+  home = ["html", "rss", "archives", "offline", "search"]
+  page = ["html", "markdown"]
+  section = ["html", "rss"]
+  taxonomy = ["html"]
+  term = ["html", "rss"]
+
+
+# ============================================================================
+# TAXONOMIES CONFIGURATION
+# ============================================================================
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+  collection = "collections"
+
+
+# ============================================================================
+# IMAGING CONFIGURATION
+# ============================================================================
+
+[imaging]
+  quality = 75
+
+
+# ============================================================================
+# RELATED CONTENT CONFIGURATION
+# ============================================================================
+
+[related]
+  includeNewer = false
+  threshold = 80
+  toLower = false
+
+  [[related.indices]]
+    applyFilter = false
+    cardinalityThreshold = 0
+    name = "keywords"
+    pattern = ""
+    toLower = false
+    type = "basic"
+    weight = 100
+
+  [[related.indices]]
+    applyFilter = false
+    cardinalityThreshold = 0
+    name = "date"
+    pattern = ""
+    toLower = false
+    type = "basic"
+    weight = 10
+
+  [[related.indices]]
+    applyFilter = false
+    cardinalityThreshold = 0
+    name = "tags"
+    pattern = ""
+    toLower = false
+    type = "basic"
+    weight = 80
+
+  [[related.indices]]
+    applyFilter = false
+    name = "fragmentrefs"
+    type = "fragments"
+    weight = 50

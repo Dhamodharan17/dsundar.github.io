@@ -1,0 +1,359 @@
+{{- /* ==========================================================================
+   Consent Manager (Google Consent Mode v2)
+   ==========================================================================
+   A modular consent management system for privacy-compliant analytics & ads.
+
+   How Google recognizes this:
+   - gtag('consent','default',...) BEFORE gtag.js loads tells Google this site
+     uses Consent Mode. Google's servers read consent state from every event.
+   - GA4 Admin > Consent Settings will show "Consent signals active" once
+     data flows.
+   - Use Google Tag Assistant to verify: https://tagassistant.google.com
+
+   Features:
+   - Google Consent Mode v2 (all 4 params: ad_storage, ad_user_data,
+     ad_personalization, analytics_storage)
+   - Global deny-by-default (banner shown to all visitors, future-proof)
+   - Lazy-loads gtag.js on first user interaction (zero LCP/FCP impact)
+   - ads_data_redaction enabled (redacts ad identifiers when denied)
+   - Floating card popup (bottom-left) — non-intrusive
+   - Remembers choice in localStorage
+   - GDPR/ePrivacy/CCPA compliant worldwide
+   - All CSS/JS namespaced with "sp-consent-" prefix to avoid theme conflicts
+
+   To extend:
+   - Add new tracking scripts in SECTION 2
+   - Modify banner text/buttons in SECTION 3
+   - Adjust styles in SECTION 4
+   ========================================================================== */ -}}
+{{- if not hugo.IsServer -}}
+
+<script>
+(function(){
+  'use strict';
+
+  // ─── SECTION 1: CONFIGURATION & CONSENT DEFAULTS ─────────────────
+  var CONFIG = {
+    ga_id: 'G-BD7LT5VX62',
+    storage_key: 'site_consent',
+    consent_version: '1',          // increment to re-ask after policy change
+    banner_delay: 800              // ms delay before showing popup
+  };
+
+  // ─── Consent State ───────────────────────────────────────────────
+  var state = JSON.parse(localStorage.getItem(CONFIG.storage_key) || 'null');
+  var gtagLoaded = false;
+
+  // Invalidate consent if policy version changed
+  if (state && state.v !== CONFIG.consent_version) {
+    state = null;
+    localStorage.removeItem(CONFIG.storage_key);
+  }
+
+  // ─── Google Consent Mode v2 Defaults ─────────────────────────────
+  // Must be set BEFORE gtag.js loads. Google reads these automatically.
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  window.gtag = gtag;
+
+  // Global default: deny all until user consents (safest — future-proof)
+  gtag('consent', 'default', {
+    'analytics_storage': 'denied',
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied'
+  });
+
+  // Redact ad click identifiers when ad_storage is denied
+  gtag('set', 'ads_data_redaction', true);
+
+  // ─── SECTION 2: TRACKING SCRIPTS (Lazy-loaded) ──────────────────
+  // Loads on first user interaction: scroll, click, touch, or keypress.
+  // Zero impact on initial page load (LCP, FCP, CLS unaffected).
+  // ────────────────────────────────────────────────────────────────
+
+  function loadAnalytics() {
+    if (gtagLoaded) return;
+    gtagLoaded = true;
+
+    // Google Analytics 4 / Google Tag
+    var s = document.createElement('script');
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.ga_id;
+    s.async = true;
+    document.head.appendChild(s);
+
+    gtag('js', new Date());
+
+    // Apply stored consent BEFORE config — ensures page_view fires with
+    // consent already granted (Google processes dataLayer queue in order)
+    if (state && state.analytics === 'granted') {
+      gtag('consent', 'update', {
+        'analytics_storage': 'granted',
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted'
+      });
+    }
+
+    // Config AFTER consent update — page_view fires with correct consent state
+    gtag('config', CONFIG.ga_id, {
+      'anonymize_ip': true,
+      'send_page_view': true
+    });
+
+    // ── Add future scripts below this line ──────────────────────────
+    // Example: Google Ads conversion tracking
+    // gtag('config', 'AW-XXXXXXXXX');
+    //
+    // Example: Microsoft Clarity
+    // var c = document.createElement('script');
+    // c.src = 'https://www.clarity.ms/tag/XXXXX';
+    // c.async = true;
+    // document.head.appendChild(c);
+    // ────────────────────────────────────────────────────────────────
+
+    removeInteractionListeners();
+  }
+
+  // Trigger load on any user interaction
+  function addInteractionListeners() {
+    var opts = { once: true, passive: true };
+    document.addEventListener('scroll', loadAnalytics, opts);
+    document.addEventListener('click', loadAnalytics, { once: true });
+    document.addEventListener('touchstart', loadAnalytics, opts);
+    document.addEventListener('keydown', loadAnalytics, { once: true });
+  }
+
+  function removeInteractionListeners() {
+    document.removeEventListener('scroll', loadAnalytics);
+    document.removeEventListener('click', loadAnalytics);
+    document.removeEventListener('touchstart', loadAnalytics);
+    document.removeEventListener('keydown', loadAnalytics);
+  }
+
+  addInteractionListeners();
+
+  // ─── SECTION 3: CONSENT BANNER (Floating Card) ─────────────────
+  // Shows only for visitors who haven't made a choice yet.
+  // Appears as a small floating card in the bottom-left corner.
+  // ────────────────────────────────────────────────────────────────
+
+  if (state) return; // Already have a stored choice — no banner
+
+  function showBanner() {
+    var b = document.createElement('div');
+    b.id = 'sp-consent-popup';
+    b.setAttribute('role', 'dialog');
+    b.setAttribute('aria-label', 'Cookie consent');
+    b.innerHTML = [
+      '<div class="sp-consent-card">',
+      '  <p class="sp-consent-msg">This site uses cookies to enhance your experience. <a class="sp-consent-learn" href="/privacy/">Learn more</a></p>',
+      '  <div class="sp-consent-actions">',
+      '    <button class="sp-consent-link sp-consent-decline">Decline</button>',
+      '    <button class="sp-consent-btn sp-consent-accept">Accept</button>',
+      '  </div>',
+      '</div>'
+    ].join('');
+    document.body.appendChild(b);
+    requestAnimationFrame(function() { b.classList.add('sp-consent-visible'); });
+
+    // Accept — grant all consent types
+    b.querySelector('.sp-consent-accept').addEventListener('click', function() {
+      saveConsent('granted');
+      loadAnalytics();
+      gtag('consent', 'update', {
+        'analytics_storage': 'granted',
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted'
+      });
+      closeBanner(b);
+    });
+
+    // Decline — keep all denied
+    b.querySelector('.sp-consent-decline').addEventListener('click', function() {
+      saveConsent('denied');
+      closeBanner(b);
+    });
+  }
+
+  function saveConsent(choice) {
+    state = { analytics: choice, v: CONFIG.consent_version, t: Date.now() };
+    localStorage.setItem(CONFIG.storage_key, JSON.stringify(state));
+  }
+
+  function closeBanner(b) {
+    b.classList.remove('sp-consent-visible');
+    setTimeout(function() { b.remove(); }, 300);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(showBanner, CONFIG.banner_delay);
+    });
+  } else {
+    setTimeout(showBanner, CONFIG.banner_delay);
+  }
+
+})();
+</script>
+
+{{- /* ==============================
+   SECTION 4: BANNER STYLES
+   Floating card, bottom-left.
+   All classes prefixed "sp-consent-" to avoid theme conflicts.
+   Dark mode: detected via prefers-color-scheme (OS) + data-theme-mode (manual toggle).
+   ============================== */ -}}
+<style>
+/* Popup container — fixed bottom-left */
+#sp-consent-popup {
+  position: fixed;
+  bottom: 14px;
+  left: 14px;
+  z-index: 99999;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .3s ease, transform .3s ease;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+#sp-consent-popup.sp-consent-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ── LIGHT MODE (default) ── */
+.sp-consent-card {
+  display: inline-block;
+  padding: 9px 11px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, .06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+}
+.sp-consent-msg {
+  margin: 0 0 7px;
+  color: #000000;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-shadow: 0 0 6px #ffffff, 0 0 3px #ffffff;
+  max-width: 165px;
+}
+.sp-consent-learn { color: #000; text-decoration: underline; text-underline-offset: 2px; font-size: 9px; }
+.sp-consent-learn:hover { opacity: .6; }
+.sp-consent-actions { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.sp-consent-btn {
+  padding: 4px 12px;
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: opacity .15s ease;
+  line-height: 1.3;
+}
+.sp-consent-btn:hover { opacity: .85; }
+.sp-consent-accept {
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, .4);
+}
+.sp-consent-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 8.5px;
+  color: #1f2937;
+  cursor: pointer;
+  text-decoration: none;
+  text-shadow: 0 0 5px #ffffff, 0 0 2px #ffffff;
+  transition: color .15s ease;
+}
+.sp-consent-link:hover { color: #000; text-decoration: underline; }
+
+/* ── DARK MODE ──
+   Priority 1: FixIt theme attribute (data-theme-mode='dark')
+   Priority 2: FixIt auto mode + system dark (data-theme-mode='auto' + prefers-color-scheme)
+   Fallback:   Browser prefers-color-scheme (if theme attribute missing)
+── */
+
+/* Theme: explicit dark */
+[data-theme-mode='dark'] .sp-consent-card,
+/* Theme: auto + system dark */
+[data-theme-mode='auto'] .sp-consent-card {
+  background: rgba(0, 0, 0, .3);
+  border-color: rgba(255, 255, 255, .08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+}
+[data-theme-mode='dark'] .sp-consent-msg,
+[data-theme-mode='auto'] .sp-consent-msg {
+  color: #ffffff;
+  text-shadow: 0 0 6px #000000, 0 0 3px #000000;
+}
+[data-theme-mode='dark'] .sp-consent-learn,
+[data-theme-mode='auto'] .sp-consent-learn { color: #fff; }
+[data-theme-mode='dark'] .sp-consent-accept,
+[data-theme-mode='auto'] .sp-consent-accept {
+  background: #3b82f6;
+  box-shadow: 0 1px 4px rgba(59, 130, 246, .5);
+}
+[data-theme-mode='dark'] .sp-consent-link,
+[data-theme-mode='auto'] .sp-consent-link {
+  color: #e5e7eb;
+  text-shadow: 0 0 5px #000000, 0 0 2px #000000;
+}
+[data-theme-mode='dark'] .sp-consent-link:hover,
+[data-theme-mode='auto'] .sp-consent-link:hover { color: #fff; }
+
+/* Theme: auto + system light — revert to light mode */
+@media (prefers-color-scheme: light) {
+  [data-theme-mode='auto'] .sp-consent-card {
+    background: rgba(255, 255, 255, .4);
+    border-color: rgba(0, 0, 0, .06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+  }
+  [data-theme-mode='auto'] .sp-consent-msg {
+    color: #000000;
+    text-shadow: 0 0 6px #ffffff, 0 0 3px #ffffff;
+  }
+  [data-theme-mode='auto'] .sp-consent-learn { color: #000; }
+  [data-theme-mode='auto'] .sp-consent-accept {
+    background: #2563eb;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, .4);
+  }
+  [data-theme-mode='auto'] .sp-consent-link {
+    color: #1f2937;
+    text-shadow: 0 0 5px #ffffff, 0 0 2px #ffffff;
+  }
+  [data-theme-mode='auto'] .sp-consent-link:hover { color: #000; }
+}
+
+/* Fallback: if no data-theme-mode attribute exists at all, use browser detection */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme-mode]) .sp-consent-card {
+    background: rgba(0, 0, 0, .3);
+    border-color: rgba(255, 255, 255, .08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+  }
+  :root:not([data-theme-mode]) .sp-consent-msg {
+    color: #ffffff;
+    text-shadow: 0 0 6px #000000, 0 0 3px #000000;
+  }
+  :root:not([data-theme-mode]) .sp-consent-learn { color: #fff; }
+  :root:not([data-theme-mode]) .sp-consent-accept {
+    background: #3b82f6;
+    box-shadow: 0 1px 4px rgba(59, 130, 246, .5);
+  }
+  :root:not([data-theme-mode]) .sp-consent-link {
+    color: #e5e7eb;
+    text-shadow: 0 0 5px #000000, 0 0 2px #000000;
+  }
+  :root:not([data-theme-mode]) .sp-consent-link:hover { color: #fff; }
+}
+</style>
+
+{{- end -}}

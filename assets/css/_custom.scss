@@ -1,0 +1,51 @@
+.post-tags-aside {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--global-border-color, #e5e7eb);
+}
+
+.post-tags-aside-title {
+  margin: 0 0 0.75rem;
+  color: var(--global-font-color, #24292f);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.post-tags-aside-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.post-tags-aside-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.5rem;
+  border: 1px solid var(--global-border-color, #e5e7eb);
+  border-radius: 6px;
+  color: var(--single-link-color, #0969da);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.post-tags-aside-link:hover {
+  border-color: var(--single-link-color, #0969da);
+  text-decoration: none;
+}
+
+.post-tags-aside-link small {
+  color: var(--global-font-secondary-color, #6b7280);
+  font-size: 0.72rem;
+}
+
+.header-title-text {
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", "JetBrains Mono", "Menlo", "Consolas", "DejaVu Sans Mono", monospace;
+}
+
+@media (max-width: 960px) {
+  .post-tags-aside {
+    display: none;
+  }
+}
